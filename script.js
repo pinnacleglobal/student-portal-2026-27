@@ -71,7 +71,7 @@ async function login() {
             if (r[2] == admission) {
                 let date = r[1] || "", slip = r[0] || "", amount = parseFloat(r[5]) || 0;
                 let feeType = r[6] || "", session = r[7] || "", tMonths = r[8] || "", trMonths = r[9] || "", exMonths = r[10] || "", mode = r[11] || "";
-                if (session == "2025-26" && feeType.toLowerCase() == "monthly fees") totalPaid += amount;
+                if (session == "2026-27" && feeType.toLowerCase() == "monthly fees") totalPaid += amount;
 
                 table += `<tr><td>${date}</td><td>${slip}</td><td>₹${amount}</td><td>${feeType}</td><td>${session}</td><td>${tMonths}</td><td>${trMonths}</td><td>${exMonths}</td><td>${mode}</td></tr>`;
                 cards += `<div class="fee-card"><div><b>Date:</b> ${date}</div><div><b>Slip Number:</b> ${slip}</div><div><b>Amount Paid:</b> ₹${amount}</div><div><b>Fee Type:</b> ${feeType}</div><div><b>Session:</b> ${session}</div><div><b>Tuition Fee Months:</b> ${tMonths}</div><div><b>Transport Fee Months:</b> ${trMonths}</div><div><b>Exam Fee Months:</b> ${exMonths}</div><div><b>Payment Mode:</b> ${mode}</div></div>`;
