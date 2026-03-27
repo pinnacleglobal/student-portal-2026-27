@@ -13,25 +13,31 @@ async function login() {
     document.getElementById("loader").style.display = "block";
 
     try {
-        // AW Sheet
+        // 1. Fetch AW Sheet Data
         let resp = await fetch(`https://sheets.googleapis.com/v4/spreadsheets/${sheetID}/values/${awSheet}?key=${apiKey}`);
         let rows = (await resp.json()).values || [];
-        let admission = "", studentName = "", father = "", mother = "", phone = "", address = "";
+        let admission = "", studentName = "", father = "", mother = "", phone = "", address = "", photoUrl = "";
         let loginBlocked = false;
 
         for (let i = 1; i < rows.length; i++) {
             let r = rows[i];
             if (r[29] && r[29].trim() == code) {
                 if (r[31] && r[31].toUpperCase() == "TRUE") { loginBlocked = true; break; }
-                admission = r[1] || ""; studentName = r[3] || ""; father = r[6] || "";
-                mother = r[5] || ""; phone = r[22] || ""; address = r[7] || ""; break;
+                admission = r[1] || ""; 
+                studentName = r[3] || ""; 
+                father = r[6] || "";
+                mother = r[5] || ""; 
+                phone = r[22] || ""; 
+                address = r[7] || ""; 
+                photoUrl = r[28] || ""; // Column AC
+                break;
             }
         }
 
-        if (loginBlocked) { alert("You Cannot Login As You Have Left The School. Please Contact The School."); location.reload(); return; }
+        if (loginBlocked) { alert("You Cannot Login As You Have Left The School."); location.reload(); return; }
         if (!admission) { alert("Invalid Login Code"); location.reload(); return; }
 
-        // Master Data
+        // 2. Fetch Master Data
         resp = await fetch(`https://sheets.googleapis.com/v4/spreadsheets/${sheetID}/values/${masterSheet}?key=${apiKey}`);
         rows = (await resp.json()).values || [];
         let studentClass = "", monthlyTuition = 0, tuitionMonths = 0, transportFees = 0, transportMonths = 0, prevRemain = 0, discount = 0, examFee = 1000;
@@ -39,19 +45,19 @@ async function login() {
         for (let i = 1; i < rows.length; i++) {
             let r = rows[i]; 
             if (r[1] == admission) {
-                studentClass = r[14] || ""; // Column O for class
+                studentClass = r[14] || "";
                 monthlyTuition = parseFloat(r[4]) || 0; 
                 prevRemain = parseFloat(r[3]) || 0;
                 discount = parseFloat(r[5]) || 0; 
                 tuitionMonths = parseFloat(r[6]) || 0;
                 transportFees = parseFloat(r[7]) || 0; 
                 transportMonths = parseFloat(r[8]) || 0;
-                examFee = parseFloat(r[9]) || 1000; // Column J for exam fee
+                examFee = parseFloat(r[9]) || 1000;
                 break;
             }
         }
 
-        // Populate info
+        // 3. Populate Student Info & PHOTO
         document.getElementById("studentName").innerText = studentName;
         document.getElementById("welcomeName").innerText = "Welcome, " + studentName;
         document.getElementById("class").innerText = studentClass;
@@ -61,7 +67,30 @@ async function login() {
         document.getElementById("phone").innerText = phone;
         document.getElementById("address").innerText = address;
 
-        // Fees Collection
+        // --- PHOTO LOGIC ---
+if (photoUrl && photoUrl.trim() !== "") {
+    let fileId = "";
+    if (photoUrl.includes("id=")) {
+        fileId = photoUrl.split("id=")[1].split("&")[0];
+    } else if (photoUrl.includes("/d/")) {
+        fileId = photoUrl.split("/d/")[1].split("/")[0];
+    }
+
+    if (fileId) {
+        const photoImg = document.getElementById("studentPhoto");
+        // This is the most reliable "Direct Link" for Google Drive images in 2026
+        photoImg.src = `https://lh3.googleusercontent.com/u/0/d/${fileId}`;
+        
+        // Ensure it displays below by making it a block element
+        photoImg.style.display = "inline-block"; 
+        
+        // Fallback: If the link above fails, try the older thumbnail format
+        photoImg.onerror = function() {
+            this.src = `https://drive.google.com/thumbnail?id=${fileId}&sz=w500`;
+        };
+    }
+}
+        // 4. Fees Collection
         resp = await fetch(`https://sheets.googleapis.com/v4/spreadsheets/${sheetID}/values/${feesSheet}?key=${apiKey}`);
         rows = (await resp.json()).values || [];
         let table = "", cards = "", totalPaid = 0;
@@ -78,11 +107,10 @@ async function login() {
             }
         }
 
-        // Total Fee & Balance
+        // 5. Final Calculation & Display
         let totalFee = ((monthlyTuition - discount) * tuitionMonths) + (transportFees * transportMonths) + examFee + prevRemain;
         let feeBalance = totalFee - totalPaid;
 
-        // Populate Fee Summary
         document.getElementById("feeTable").innerHTML = table;
         document.getElementById("feeCards").innerHTML = cards;
         document.getElementById("monthlyTuition").innerText = "₹" + monthlyTuition;
@@ -92,8 +120,6 @@ async function login() {
         document.getElementById("prevRemain").innerText = "₹" + prevRemain;
         document.getElementById("discount").innerText = "₹" + discount;
         document.getElementById("totalPaid").innerText = "₹" + totalPaid;
-
-        // Update Fee Summary Exam Fee dynamically
         document.getElementById("examFee").innerText = "₹" + examFee;
 
         let bal = document.getElementById("feeBalance");
@@ -110,9 +136,9 @@ async function login() {
 
     } catch (e) {
         console.error(e);
+        alert("An error occurred during login. Check console for details.");
         document.getElementById("loader").style.display = "none";
         document.getElementById("loginBtn").disabled = false;
-        setupSendScreenshotButton();
     }
 }
 
