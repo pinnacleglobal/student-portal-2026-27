@@ -5,6 +5,7 @@ const masterSheet = encodeURIComponent("Master Data 2026"); // Updated sheet nam
 const feesSheet = encodeURIComponent("Fees Collection");
 const awSheet = encodeURIComponent("AW");
 
+let originalDiscount = 0;
 async function login() {
     const code = document.getElementById("loginCode").value.trim();
     if (!code) { alert("Enter Login Code"); return; }
@@ -48,7 +49,8 @@ async function login() {
                 studentClass = r[14] || "";
                 monthlyTuition = parseFloat(r[4]) || 0; 
                 prevRemain = parseFloat(r[3]) || 0;
-                discount = parseFloat(r[5]) || 0; 
+                discount = parseFloat(r[5]) || 0;
+                originalDiscount = discount;
                 tuitionMonths = parseFloat(r[6]) || 0;
                 transportFees = parseFloat(r[7]) || 0; 
                 transportMonths = parseFloat(r[8]) || 0;
@@ -118,7 +120,7 @@ if (photoUrl && photoUrl.trim() !== "") {
         document.getElementById("transportFees").innerText = "₹" + transportFees;
         document.getElementById("transportMonths").innerText = transportMonths;
         document.getElementById("prevRemain").innerText = "₹" + prevRemain;
-        document.getElementById("discount").innerText = "₹" + discount;
+        document.getElementById("discount").innerText = "₹" + Math.round(discount);
         document.getElementById("totalPaid").innerText = "₹" + totalPaid;
         document.getElementById("examFee").innerText = "₹" + examFee;
 
@@ -163,8 +165,7 @@ function calculateFees(examFee = 500) {
 
     const monthly = parseFloat(document.getElementById("monthlyTuition").innerText.replace("₹", ""));
     const transport = parseFloat(document.getElementById("transportFees").innerText.replace("₹", ""));
-    const discount = parseFloat(document.getElementById("discount").innerText.replace("₹", ""));
-
+    const discount = originalDiscount;
     // Take half of the exam fee for Calculate Fees
     let examFeePerMonth = examFee / 2;
 
