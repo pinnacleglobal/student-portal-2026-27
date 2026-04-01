@@ -109,7 +109,7 @@ if (photoUrl && photoUrl.trim() !== "") {
 
         // 5. Final Calculation & Display
         let totalFee = ((monthlyTuition - discount) * tuitionMonths) + (transportFees * transportMonths) + examFee + prevRemain;
-        let feeBalance = totalFee - totalPaid;
+        let feeBalance = Math.round((totalFee - totalPaid) || 0);
 
         document.getElementById("feeTable").innerHTML = table;
         document.getElementById("feeCards").innerHTML = cards;
