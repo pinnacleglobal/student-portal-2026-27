@@ -67,7 +67,9 @@ async function login(isAuto = false, targetView = 'view-dashboard') {
         if (!mRow) { alert("Data Not Found. Contact School Admin"); logout(); return; }
 
         localStorage.setItem("portalLoginCode", code);
-
+        // --- ADD THIS LINE HERE ---
+if (typeof gtag === 'function') gtag('event', 'login', { 'method': isAuto ? 'Auto_Login' : 'Manual_Login' });
+// --------------------------
         // Render Dashboard Immediately
         handlePermissions(pData[2].values);
         populateStudentProfile(student, mRow);
@@ -113,6 +115,11 @@ document.getElementById("installBtn").onclick = async () => {
     if (deferredPrompt) {
         deferredPrompt.prompt();
         const { outcome } = await deferredPrompt.userChoice;
+     
+        if (typeof gtag === 'function') {
+            gtag('event', 'pwa_install_click', { 'outcome': outcome });
+        }
+   
         if (outcome === 'accepted') document.getElementById("installBtn").style.display = "none";
         deferredPrompt = null;
     }
@@ -273,3 +280,15 @@ function showNotification() {
 }
 
 if ('serviceWorker' in navigator) { navigator.serviceWorker.register('sw.js'); }
+// Add this at the very end of script.js
+window.addEventListener('DOMContentLoaded', () => {
+    // Check if the app is running in "standalone" mode (installed PWA)
+    const isPWA = window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone;
+    const displayMode = isPWA ? 'PWA' : 'Browser';
+    
+    if (typeof gtag === 'function') {
+        gtag('event', 'app_launch', {
+            'display_mode': displayMode
+        });
+    }
+});
