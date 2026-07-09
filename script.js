@@ -8,7 +8,27 @@ const sheets = {
     ds: encodeURIComponent("DS n Notice"),
     att: encodeURIComponent("Attendance"),
     res: encodeURIComponent("Res")
-};al");
+};
+
+let originalDiscount = 0;
+let globalNotification = "No notification to show";
+let currentUserData = {}; 
+
+document.addEventListener("DOMContentLoaded", () => {
+    const savedCode = localStorage.getItem("portalLoginCode");
+    const savedView = localStorage.getItem("currentView") || "view-dashboard";
+    if (savedCode) {
+        login(true, savedView);
+    } else {
+        document.getElementById("loader").style.display = "none";
+        document.getElementById("loginBox").style.display = "block";
+    }
+});
+
+async function login(isAuto = false, targetView = 'view-dashboard') {
+    const loginBox = document.getElementById("loginBox");
+    const loader = document.getElementById("loader");
+    const portal = document.getElementById("portal");
     const code = isAuto ? localStorage.getItem("portalLoginCode") : document.getElementById("loginCode").value.trim();
 
     if (!code) {
