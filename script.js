@@ -392,7 +392,7 @@ function setupPaymentLink(amount, btnId) {
     btn.onclick = () => {
         if (amount <= 0) return alert("Enter amount > 0");
         const note = encodeURIComponent(`${document.getElementById("adm").innerText} ${document.getElementById("studentName").innerText} FEE`);
-        window.location.href = `upi://pay?pa=pinnacleglobalschool.62697340@hdfcbank&pn=Pinnacle Global School&am=${amount}&cu=INR&tn=${note}`;
+        window.location.href = `upi://pay?pa=pgs01@ybl&pn=Pinnacle Global School&am=${amount}&cu=INR&tn=${note}`;
     };
 }
 
