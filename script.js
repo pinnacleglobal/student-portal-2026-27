@@ -388,13 +388,51 @@ function setupDateSheet(rows, studentClass) {
     if(bodyEl) bodyEl.innerHTML = html || "<tr><td colspan='2'>Nothing to show</td></tr>";
 }
 function setupPaymentLink(amount, btnId) {
-    const btn = document.getElementById(btnId);
-    if (!btn) return;
 
-    btn.onclick = () => {
-        window.location.href =
-        "upi://pay?pa=pgs01@ybl&pn=Pinnacle%20Global%20School&am=1&cu=INR";
-    };
+    const upi = "pgs01@ybl";
+
+    if(btnId==="payBalanceBtn"){
+
+        const b1=document.getElementById("copyUpiBtn");
+        const b2=document.getElementById("copyBalanceBtn");
+
+        if(b1){
+            b1.onclick=()=>{
+                navigator.clipboard.writeText(upi);
+                alert("UPI ID copied.");
+            };
+        }
+
+        if(b2){
+            b2.onclick=()=>{
+                navigator.clipboard.writeText(String(Math.round(amount)));
+                alert("Amount copied.");
+            };
+        }
+
+    }
+
+    if(btnId==="payNowBtn"){
+
+        const b1=document.getElementById("copyUpiBtn2");
+        const b2=document.getElementById("copyCalcBtn");
+
+        if(b1){
+            b1.onclick=()=>{
+                navigator.clipboard.writeText(upi);
+                alert("UPI ID copied.");
+            };
+        }
+
+        if(b2){
+            b2.onclick=()=>{
+                navigator.clipboard.writeText(String(Math.round(amount)));
+                alert("Amount copied.");
+            };
+        }
+
+    }
+
 }
 
 function setupSendScreenshotButtons() {
