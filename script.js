@@ -388,11 +388,12 @@ function setupDateSheet(rows, studentClass) {
     if(bodyEl) bodyEl.innerHTML = html || "<tr><td colspan='2'>Nothing to show</td></tr>";
 }
 function setupPaymentLink(amount, btnId) {
-    const btn = document.getElementById(btnId); if(!btn) return;
+    const btn = document.getElementById(btnId);
+    if (!btn) return;
+
     btn.onclick = () => {
-        if (amount <= 0) return alert("Enter amount > 0");
-        const note = encodeURIComponent(`${document.getElementById("adm").innerText} ${document.getElementById("studentName").innerText} FEE`);
-        window.location.href = `upi://pay?pa=pgs01@ybl&pn=Pinnacle Global School&am=${amount}&cu=INR&tn=${note}`;
+        window.location.href =
+        "upi://pay?pa=pgs01@ybl&pn=Pinnacle%20Global%20School&am=1&cu=INR";
     };
 }
 
