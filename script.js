@@ -388,51 +388,12 @@ function setupDateSheet(rows, studentClass) {
     if(bodyEl) bodyEl.innerHTML = html || "<tr><td colspan='2'>Nothing to show</td></tr>";
 }
 function setupPaymentLink(amount, btnId) {
-
-    const upi = "pgs01@ybl";
-
-    if(btnId==="payBalanceBtn"){
-
-        const b1=document.getElementById("copyUpiBtn");
-        const b2=document.getElementById("copyBalanceBtn");
-
-        if(b1){
-            b1.onclick=()=>{
-                navigator.clipboard.writeText(upi);
-                alert("UPI ID copied.");
-            };
-        }
-
-        if(b2){
-            b2.onclick=()=>{
-                navigator.clipboard.writeText(String(Math.round(amount)));
-                alert("Amount copied.");
-            };
-        }
-
-    }
-
-    if(btnId==="payNowBtn"){
-
-        const b1=document.getElementById("copyUpiBtn2");
-        const b2=document.getElementById("copyCalcBtn");
-
-        if(b1){
-            b1.onclick=()=>{
-                navigator.clipboard.writeText(upi);
-                alert("UPI ID copied.");
-            };
-        }
-
-        if(b2){
-            b2.onclick=()=>{
-                navigator.clipboard.writeText(String(Math.round(amount)));
-                alert("Amount copied.");
-            };
-        }
-
-    }
-
+    const btn = document.getElementById(btnId); if(!btn) return;
+    btn.onclick = () => {
+        if (amount <= 0) return alert("Enter amount > 0");
+        const note = encodeURIComponent(`${document.getElementById("adm").innerText} ${document.getElementById("studentName").innerText} FEE`);
+        window.location.href = `upi://pay?pa=pinnacleglobalschool.62697340@hdfcbank&pn=Pinnacle Global School&am=${amount}&cu=INR&tn=${note}`;
+    };
 }
 
 function setupSendScreenshotButtons() {
