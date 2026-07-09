@@ -176,7 +176,20 @@
         <div class="profile">
             <div class="info"><span class="label">Total Fees Paid in Current Session :</span> <span id="totalPaid"></span></div>
             <div class="info"><span class="label">Fee Balance :</span> <span id="feeBalance" style="font-weight:bold;"></span></div>
-            <button id="payBalanceBtn" class="pay-btn">Pay Balance Now</button>
+           <div class="payment-box">
+    <div class="info">
+        <span class="label">School UPI ID :</span>
+        <span id="upiId">pgs01@ybl</span>
+    </div>
+
+    <button id="copyUpiBtn" class="pay-btn" style="background:#0b3d91;">
+        📋 Copy UPI ID
+    </button>
+
+    <button id="copyBalanceBtn" class="pay-btn" style="background:#28a745;">
+        📋 Copy Balance Amount
+    </button>
+</div>
             <button id="sendScreenshotBalanceBtn" class="whatsapp-btn"><i class="fab fa-whatsapp"></i> Send Screenshot to School</button>
             
             <div class="instructions">
@@ -191,7 +204,47 @@
             <div class="info"><label class="label">Choose Transport Fee Months :</label><br><select id="calcTransportMonths"></select></div>
             <div class="info"><label class="label">Choose Exam Fee Months :</label><br><select id="calcExamMonths"></select></div>
             <div class="info" style="font-size:18px;"><span class="label">Estimated Total :</span> <span id="calcTotal">₹0</span></div>
-            <button id="payNowBtn" class="pay-btn">Pay Estimated Amount</button>
+            <div class="payment-box">
+
+    <div class="info">
+        <span class="label">School UPI ID :</span>
+        <span>pgs01@ybl</span>
+    </div>
+
+    <button id="copyUpiBtn2" class="pay-btn" style="background:#0b3d91;">
+        📋 Copy UPI ID
+    </button>
+
+    <button id="copyCalcBtn" class="pay-btn" style="background:#28a745;">
+        📋 Copy Estimated Amount
+    </button>
+
+</div>
+<div class="instructions">
+
+<b>How to Pay</b><br><br>
+
+1. Tap <b>Copy UPI ID</b>.<br>
+2. Open PhonePe / Google Pay / Paytm.<br>
+3. Select <b>Pay to UPI ID</b>.<br>
+4. Paste the UPI ID.<br>
+5. Enter the copied amount.<br>
+6. Complete payment.<br>
+7. Return here and send payment screenshot.
+
+<br><br>
+
+<b>भुगतान करने की प्रक्रिया</b><br><br>
+
+① UPI ID कॉपी करें।<br>
+② PhonePe / Paytm / Google Pay खोलें।<br>
+③ Pay to UPI ID चुनें।<br>
+④ UPI ID पेस्ट करें।<br>
+⑤ राशि भरें।<br>
+⑥ भुगतान करें।<br>
+⑦ स्क्रीनशॉट स्कूल को भेजें।
+
+</div>
             <button id="sendScreenshotCalcBtn" class="whatsapp-btn"><i class="fab fa-whatsapp"></i> Send Screenshot to School</button>
             <div class="instructions">
                 <b>Note:</b> This is an automated calculation based on your current fee structure.
